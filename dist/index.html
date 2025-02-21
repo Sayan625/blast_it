@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>blast it</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: black;
+    }
+
+
+  </style>
+</head>
+
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <script>
+    const canvas=document.querySelector("#unity-canvas");
+    function getCookie(name) {
+      let value = "; " + document.cookie;
+      let parts = value.split("; " + name + "=");
+      if (parts.length === 2) return parts.pop().split(";").shift();
+      return null;
+    }
+
+    // const token = getCookie('token');
+    // console.log("token:",token);
+function resizeCanvas() {
+  const aspectRatio = 9 / 16; // Portrait aspect ratio
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+
+  let canvasWidth, canvasHeight;
+
+  // Ensure the canvas stays in portrait mode
+  if (windowWidth / windowHeight > aspectRatio) {
+    // Window is too wide; constrain by height
+    canvasHeight = windowHeight;
+    canvasWidth = canvasHeight * aspectRatio;
+  } else {
+    // Window is too tall or matches aspect ratio; constrain by width
+    canvasWidth = windowWidth;
+    canvasHeight = canvasWidth / aspectRatio;
+  }
+
+  // Apply calculated size
+  canvas.style.width = `${canvasWidth}px`;
+  canvas.style.height = `${canvasHeight}px`;
+}
+
+
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeCanvas, 100);
+    });
+
+    var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/build.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/build.data.br",
+        frameworkUrl: buildUrl + "/build.framework.js.br",
+        codeUrl: buildUrl + "/build.wasm.br",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "blast it",
+        productVersion: "0.1.0",
+        devicePixelRatio: 1
+      };
+
+        
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = () => {
+          createUnityInstance(canvas, config, (progress) => {
+          }).then((unityInstance) => {
+
+            canvas.requestFullscreen(1);
+            if(unityInstance){
+            }
+            
+          }).catch((message) => {
+            alert(message);
+          });
+        };
+        
+        document.body.appendChild(script);
+        window.addEventListener('load', resizeCanvas());
+  </script>
+</body>
+
+</html>
